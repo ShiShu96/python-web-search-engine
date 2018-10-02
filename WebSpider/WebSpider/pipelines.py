@@ -13,7 +13,7 @@ from scrapy.http import Request
 
 from scrapy.pipelines.images import ImagesPipeline
 
-class WebspyderPipeline(object):
+class WebSpiderPipeline(object):
     def process_item(self, item, spider):
         return item
 

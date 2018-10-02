@@ -11,7 +11,7 @@ import scrapy
 from scrapy.loader.processors import MapCompose, Join, TakeFirst
 from scrapy.loader import ItemLoader
 
-class WebspyderItem(scrapy.Item):
+class WebSpiderItem(scrapy.Item):
     # define the fields for your item here like:
     # name = scrapy.Field()
     pass

@@ -3,9 +3,9 @@ import scrapy
 from scrapy.http import Request
 from urllib import parse
 
-from WebSpyder.items import JobboleItemLoader
-from WebSpyder.utils import common
-from WebSpyder.items import JobboleItem
+from WebSpider.items import JobboleItemLoader
+from WebSpider.utils import common
+from WebSpider.items import JobboleItem
 
 class JobboleSpider(scrapy.Spider):
     name = 'jobbole'

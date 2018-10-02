@@ -2,7 +2,7 @@
 
 import os
 
-# Scrapy settings for WebSpyder project
+# Scrapy settings for WebSpider project
 #
 # For simplicity, this file contains only settings considered important or
 # commonly used. You can find more settings consulting the documentation:
@@ -11,14 +11,14 @@ import os
 #     https://doc.scrapy.org/en/latest/topics/downloader-middleware.html
 #     https://doc.scrapy.org/en/latest/topics/spider-middleware.html
 
-BOT_NAME = 'WebSpyder'
+BOT_NAME = 'WebSpider'
 
-SPIDER_MODULES = ['WebSpyder.spiders']
-NEWSPIDER_MODULE = 'WebSpyder.spiders'
+SPIDER_MODULES = ['WebSpider.spiders']
+NEWSPIDER_MODULE = 'WebSpider.spiders'
 
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-#USER_AGENT = 'WebSpyder (+http://www.yourdomain.com)'
+#USER_AGENT = 'WebSpider (+http://www.yourdomain.com)'
 
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = False
@@ -49,13 +49,13 @@ ROBOTSTXT_OBEY = False
 # Enable or disable spider middlewares
 # See https://doc.scrapy.org/en/latest/topics/spider-middleware.html
 #SPIDER_MIDDLEWARES = {
-#    'WebSpyder.middlewares.WebspyderSpiderMiddleware': 543,
+#    'WebSpider.middlewares.WebSpiderSpiderMiddleware': 543,
 #}
 
 # Enable or disable downloader middlewares
 # See https://doc.scrapy.org/en/latest/topics/downloader-middleware.html
 #DOWNLOADER_MIDDLEWARES = {
-#    'WebSpyder.middlewares.WebspyderDownloaderMiddleware': 543,
+#    'WebSpider.middlewares.WebSpiderDownloaderMiddleware': 543,
 #}
 
 # Enable or disable extensions
@@ -67,9 +67,9 @@ ROBOTSTXT_OBEY = False
 # Configure item pipelines
 # See https://doc.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-    'WebSpyder.pipelines.MyImagePipeline':1,
-    'WebSpyder.pipelines.JsonPipeline':2,
-    'WebSpyder.pipelines.MysqlPipeline':3,
+    'WebSpider.pipelines.MyImagePipeline':1,
+    'WebSpider.pipelines.JsonPipeline':2,
+    'WebSpider.pipelines.MysqlPipeline':3,
 }
 project_dir=os.path.abspath(os.path.dirname(__file__))
 IMAGES_STORE=os.path.join(project_dir, "imgs")
@@ -94,8 +94,3 @@ IMAGES_STORE=os.path.join(project_dir, "imgs")
 #HTTPCACHE_DIR = 'httpcache'
 #HTTPCACHE_IGNORE_HTTP_CODES = []
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
-
-MYSQL_HOST='127.0.0.1'
-MYSQL_USER='root'
-MYSQL_PASSWORD='12345678'
-MYSQL_DB='search_engine'
