@@ -7,6 +7,10 @@ from WebSpider.items import JobboleItemLoader
 from WebSpider.utils import common
 from WebSpider.items import JobboleItem
 
+'''
+blog.jobbole.com
+articles, comments
+'''
 class JobboleSpider(scrapy.Spider):
     name = 'jobbole'
     allowed_domains = ['blog.jobbole.com']

@@ -67,8 +67,8 @@ ROBOTSTXT_OBEY = False
 # Configure item pipelines
 # See https://doc.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-    'WebSpider.pipelines.MyImagePipeline':1,
-    'WebSpider.pipelines.JsonPipeline':2,
+    #'WebSpider.pipelines.MyImagePipeline':1,
+    #'WebSpider.pipelines.JsonPipeline':2,
     'WebSpider.pipelines.MysqlPipeline':3,
 }
 project_dir=os.path.abspath(os.path.dirname(__file__))
