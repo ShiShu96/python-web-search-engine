@@ -1,0 +1,87 @@
+
+<!DOCTYPE html >
+<html>
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=emulateIE7" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="{{ url_for("static", filename="css/bootstrap.min.css") }}" rel="stylesheet" type="text/css" />
+<style>
+
+.inputArea{position:relative;margin-bottom:65px;}
+.inputArea .searchInput{border:1px solid #bfbfbf;padding:0 15px;outline:none;height:40px;*height:39px;*line-height:40px;width:520px; background:url(../img/inputbg.png);font-size:14px;}
+.inputArea .searchButton{position:absolute;left:550px;*left:552px;*top:1px;width:106px;height:42px;*height:41px;background:url(../img/seachbtn.png) no-repeat;border:none;cursor:pointer;}
+
+.inputArea .dataList{display:none;position:absolute;left:0;top:42px;*top:43px;width:550px;padding:5px 0;background:#fff;border:1px solid #bfbfbf;border-top:none;}
+.inputArea .dataList li{padding:2px 15px;font-size:14px; list-style-type:none;}
+.inputArea .dataList li:hover{background:#f0f0f0;color:#0080cc;font-weight:bold;}
+
+</style>
+<body>
+    <div class="container">
+        <div class="offset-md-1 col-md-10" style="margin-top:20%">
+            <div class="inputArea">
+                <div class="row">
+                    <div class="col-md-8">
+                        <input type="text" class="searchInput" />
+                        <ul class="dataList"></ul>
+                    </div>
+                    <div class="col-md-4">
+                        <button type="button" class="btn btn-primary" onclick="add_search()">Search</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</head>
+<script type="text/javascript" src="{{ url_for("static", filename="js/jquery.js") }}"></script>
+<script type="text/javascript" src="{{ url_for("static", filename="js/bootstrap.min.js") }}"></script>
+<script type="text/javascript">
+    var suggest_url = "/suggest"
+    var search_url = "/search"
+
+
+    // search suggest
+    $(function(){
+        $('.searchInput').bind(' input propertychange ',function(){
+            var searchText = $(this).val();
+            var tmpHtml = ""
+            $.ajax({
+                cache: false,
+                type: 'get',
+                dataType:'json',
+                url:suggest_url+"?s="+searchText,
+                async: true,
+                success: function(data) {
+                    for (var i=0;i<data.length;i++){
+                        tmpHtml += '<li><a href="'+search_url+'?s='+data[i]+'">'+data[i]+'</a></li>'
+                    }
+                    $(".dataList").html("")
+                    $(".dataList").append(tmpHtml);
+                    if (data.length == 0){
+                        $('.dataList').hide()
+                    }else {
+                        $('.dataList').show()
+                    }
+                }
+            });
+        } );
+    })
+
+    hideElement($('.dataList'), $('.searchInput'));
+
+</script>
+<script>
+
+    function add_search(){
+        var val = $(".searchInput").val();
+
+        window.location.href=search_url+'?s='+val;
+
+    }
+
+
+</script>
+</html>

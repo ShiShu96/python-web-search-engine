@@ -1,0 +1,39 @@
+
+<!DOCTYPE html >
+<html>
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=emulateIE7" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+<link href="{{ url_for("static", filename="css/bootstrap.min.css") }}" rel="stylesheet" type="text/css" />
+<style>
+.key{color:#d90909;}
+</style>
+</head>
+<body>
+    <div class="alert alert-success">
+        <p>Search <strong>{{key_words}}</strong> in {{last_seconds}} seconds</p>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                {% for hit in article_hits %}
+                <div class="card">
+                    <div class="card-header"><a href="{{ hit.url }}">{{ hit.title|safe }}</a></div>
+                    <div class="card-body">{{ hit.content|safe }}</div> 
+                </div>
+                {% endfor %}
+            </div>
+            <div class="col-md-6">            
+                {% for hit in job_hits %}
+                    <div class="card">
+                        <div class="card-header"><a href="{{ hit.url}}">{{ hit.title|safe }}</a></div>
+                        <div class="card-body">{{ hit.description|safe }}</div> 
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</body>
+<script type="text/javascript" src="{{ url_for("static", filename="js/bootstrap.min.js") }}"></script>
+</html>
