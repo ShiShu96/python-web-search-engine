@@ -7,6 +7,7 @@
 
 from scrapy import signals
 
+from WebSpider.utils.user_agent import get_random_user_agent
 
 class WebSpiderSpiderMiddleware(object):
     # Not all methods need to be defined. If a method is not defined,
@@ -101,3 +102,30 @@ class WebSpiderDownloaderMiddleware(object):
 
     def spider_opened(self, spider):
         spider.logger.info('Spider opened: %s' % spider.name)
+
+class RandomUserAgentMiddleware(object):
+    # choose user agent randomly
+
+    def __init__(self, crawler):
+        super().__init__()
+
+    @classmethod
+    def from_crawler(cls, crawler):
+        return cls(crawler)
+
+    def process_request(self, request, spider):
+        request.headers.setdefault('User-Agent', get_random_user_agent())
+
+from selenium import webdriver
+from scrapy.http import HtmlResponse
+class JSPageMiddleware(object):
+
+    # dynamic web request
+    def process_request(self, request, spider):
+        if spider.name == "lagou":
+            # browser = webdriver.Chrome(executable_path="/usr/local/bin/PhantomJS")
+            spider.browser.get(request.url)
+            import time
+            time.sleep(3)
+
+            return HtmlResponse(url=spider.browser.current_url, body=spider.browser.page_source, encoding="utf-8", request=request)

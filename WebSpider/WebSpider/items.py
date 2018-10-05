@@ -12,6 +12,10 @@ from scrapy.loader.processors import MapCompose, Join, TakeFirst
 from scrapy.loader import ItemLoader
 from w3lib.html import remove_tags
 
+from WebSpider.models.es_models import ArticleType, JobType
+from elasticsearch_dsl.connections import connections
+
+
 class WebSpiderItem(scrapy.Item):
     # define the fields for your item here like:
     # name = scrapy.Field()
@@ -38,6 +42,23 @@ def remove_comment_tags(value):
 
 class JobboleItemLoader(ItemLoader):
     default_output_processor=TakeFirst()
+
+def gen_suggests(es, index, info_tuple):
+    # generate search suggestion array
+    used_words = set()
+    suggests = []
+    for text, weight in info_tuple:
+        if text:
+            words = es.indices.analyze(index=index, analyzer="ik_max_word", params={'filter':["lowercase"]}, body=text)
+            anylyzed_words = set([r["token"] for r in words["tokens"] if len(r["token"])>1])
+            new_words = anylyzed_words - used_words
+        else:
+            new_words = set()
+
+        if new_words:
+            suggests.append({"input":list(new_words), "weight":weight})
+
+    return suggests
 
 class JobboleItem(scrapy.Item):
     title=scrapy.Field()
@@ -75,6 +96,28 @@ class JobboleItem(scrapy.Item):
                   self["tags"], self["content"])
 
         return insert_sql, params   
+
+    def save_to_es(self):
+        article = ArticleType()
+        article.title = self['title']
+        article.create_date = self["create_date"]
+        article.content = remove_tags(self["content"])
+        article.front_image_url = self["front_image_url"]
+        if "front_image_path" in self:
+            article.front_image_path = self["front_image_path"]
+        article.praise_nums = self["praise_nums"]
+        article.fav_nums = self["fav_nums"]
+        article.comment_nums = self["comment_nums"]
+        article.url = self["url"]
+        article.tags = self["tags"]
+        article.meta.id = self["url_object_id"]
+
+        es = connections.create_connection(ArticleType._doc_type.using)
+        article.suggest = gen_suggests(es, ArticleType._doc_type.index, ((article.title,10),(article.tags, 7)))
+
+        article.save()
+
+        return
 
 
 def drop_splash(value):
@@ -128,3 +171,27 @@ class LagouItem(scrapy.Item):
                   self["company_name"])
 
         return insert_sql, params
+
+    def save_to_es(self):
+        job=JobType()
+        job.title=self["title"]
+        job.url=self["url"]
+        job.url_object_id=self["url_object_id"]
+        job.salary=self["salary"]
+        job.degree=self["degree"]
+        job.city=self["city"]
+        job.work_years=self["work_years"]
+        job.type=self["type"]
+        job.publish_time=self["publish_time"]
+        job.tags=self["tags"]
+        job.description=self["description"]
+        job.address=self["address"]
+        job.company_name=self["company_name"]
+        job.company_url=self["company_url"]
+
+        es = connections.create_connection(JobType._doc_type.using)
+        job.suggest = gen_suggests(es, JobType._doc_type.index, ((job.title,10),(job.tags, 7)))
+
+        job.save()
+
+        return

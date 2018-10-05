@@ -12,27 +12,34 @@ from WebSpider.utils import common
 class LagouSpider(CrawlSpider):
     name = 'lagou'
     allowed_domains = ['www.lagou.com']
-    start_urls = ['https://www.lagou.com/zhaopin/Java/']
-
-    headers={        
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:61.0) Gecko/20100101 Firefox/61.0",        
-        "HOST": "www.lagou.com",
-        "Referer": "https://www.lagou.com/",
-        "Connection": "keep-alive"
-    }
+    start_urls = [
+        'https://www.lagou.com/zhaopin/Java/',
+        'https://www.lagou.com/zhaopin/PHP/',
+        'https://www.lagou.com/zhaopin/C++/'
+    ]
 
     rules = (
-        #Rule(LinkExtractor(allow="zhaopin/.*"), process_request='add_headers'),
-        Rule(LinkExtractor(allow=r'https://www.lagou.com/jobs/\d+.html'), process_request='add_headers', callback='parse_job', follow=True),
+        Rule(LinkExtractor(allow=r'https://www.lagou.com/jobs/\d+.html'), callback='parse_job', follow=True),
     )
 
-    def add_headers(self, request):
-        new_request=request.replace(headers=self.headers)
-        new_request.meta.update(cookiejar=1)
-        return new_request
-
     def start_requests(self):
-        yield Request(self.start_urls[0], headers=self.headers)
+        cookies={
+            '_ga':'GA1.2.294187429.1538535370',
+            '_gat':"1",
+            '_gid':'GA1.2.555476700.1538700093',
+            'JSESSIONID':'ABAAABAAAFCAAEG457CC9AA82383E12F4689BFA3E883E95',
+            'index_location_city':'%E5%8C%97%E4%BA%AC',
+            'Hm_lpvt_4233e74dff0ae5bd0a3d81c6ccf756e6': '1538761761',
+            'Hm_lvt_4233e74dff0ae5bd0a3d81c6ccf756e6':'1538535371',
+            'LGRID':'20181006014920-fcb28fbc-c8c6-11e8-a940-525400f775ce',
+            'LGSID':'20181006014841-e57e4bd1-c8c6-11e8-bb68-5254005c3644',
+            'LGUID':'20181003105615-e487e4b9-c6b7-11e8-a8c8-525400f775ce',
+            'user_trace_token':'20181003105615-e487e19f-c6b7-11e8-a8c8-525400f775ce',
+            'PRE_LAND':'https%3A%2F%2Fwww.lagou.com%2F',
+            'X_HTTP_TOKEN':'75f8dae8da6ff8041ecf9303fd06b0ec',
+        }
+        for url in self.start_urls:
+            yield Request(url, cookies=cookies)
 
     def parse_job(self, response):
         # parse job information

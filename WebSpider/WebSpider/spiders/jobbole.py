@@ -28,9 +28,9 @@ class JobboleSpider(scrapy.Spider):
         '''
         2. get the url of next page and repeat parsing
         '''
-        # next_url = response.css(".next.page-numbers::attr(href)").extract_first("")        
-        # if next_url:
-        #     yield Request(url=arse.urljoin(response.url, next_url), callback=self.parse)
+        next_url = response.css(".next.page-numbers::attr(href)").extract_first("")        
+        if next_url:
+            yield Request(url=next_url, callback=self.parse)
 
     def parse_detail(self, response):
 

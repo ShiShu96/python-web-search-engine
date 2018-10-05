@@ -29,7 +29,7 @@ ROBOTSTXT_OBEY = False
 # Configure a delay for requests for the same website (default: 0)
 # See https://doc.scrapy.org/en/latest/topics/settings.html#download-delay
 # See also autothrottle settings and docs
-#DOWNLOAD_DELAY = 3
+DOWNLOAD_DELAY = 5
 # The download delay setting will honor only one of:
 #CONCURRENT_REQUESTS_PER_DOMAIN = 16
 #CONCURRENT_REQUESTS_PER_IP = 16
@@ -54,9 +54,9 @@ ROBOTSTXT_OBEY = False
 
 # Enable or disable downloader middlewares
 # See https://doc.scrapy.org/en/latest/topics/downloader-middleware.html
-#DOWNLOADER_MIDDLEWARES = {
-#    'WebSpider.middlewares.WebSpiderDownloaderMiddleware': 543,
-#}
+DOWNLOADER_MIDDLEWARES = {
+   'WebSpider.middlewares.RandomUserAgentMiddleware': 1,
+}
 
 # Enable or disable extensions
 # See https://doc.scrapy.org/en/latest/topics/extensions.html
@@ -67,9 +67,10 @@ ROBOTSTXT_OBEY = False
 # Configure item pipelines
 # See https://doc.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-    #'WebSpider.pipelines.MyImagePipeline':1,
-    #'WebSpider.pipelines.JsonPipeline':2,
-    'WebSpider.pipelines.MysqlPipeline':3,
+    # 'WebSpider.pipelines.MyImagePipeline':1,
+    # 'WebSpider.pipelines.JsonPipeline':2,
+    # 'WebSpider.pipelines.MysqlPipeline':3,
+    'WebSpider.pipelines.ElasticSearchPipline':3,
 }
 project_dir=os.path.abspath(os.path.dirname(__file__))
 IMAGES_STORE=os.path.join(project_dir, "imgs")

@@ -59,4 +59,11 @@ class MysqlPipeline(object):
         insert_sql, params = item.get_insert_sql()
         cursor.execute(insert_sql, params)  
         self.conn.commit() 
-        
+
+class ElasticSearchPipline(object):
+    '''
+    pipeline for inserting item into elastic search
+    '''
+    def process_item(self, item, spider):
+        item.save_to_es()
+        return item
